@@ -49,7 +49,12 @@ rb-site install \
     --db-pass=$DATABASE_PASS \
     $SITEDIR
 
-if [[ $DATABASE_TYPE != "sqlite3" ]]; then
+if [[ $DATABASE_TYPE == "sqlite3" ]]; then
+    sed -i '' \
+        -e "s/['\"]NAME['\"]: ['\"].*['\"]/"
+            "'NAME': '$SITEDIR/data/reviewboard.db'/g" \
+        $SITEDIR/conf/settings_local.py
+else
     sed -i '' \
         -e "s/['\"]NAME['\"]: ['\"].*['\"]/'NAME': 'reviewboard'/g" \
         -e "s/['\"]USER['\"]: ['\"].*['\"]/'USER': 'reviewboard'/g" \
